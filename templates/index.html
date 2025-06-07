@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Listado de Tareas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 40px auto;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #406a9f88;
+            background: #e6eef7;
+        }
+        h1 {
+            color: #406a9f;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #406a9f;
+            text-align: left;
+            vertical-align: middle;
+            color: #2a3e5c;
+        }
+        th {
+            background-color: #406a9f;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #dbe7f7;
+        }
+        tr:hover {
+            background-color: #c0d4f3;
+        }
+        a.button {
+            display: inline-block;
+            background-color: #406a9f;
+            color: white;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        a.button:hover {
+            background-color: #2f4f7b;
+        }
+        form.inline {
+            display: inline;
+        }
+        button.delete-btn {
+            background-color: #d9534f;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+        button.delete-btn:hover {
+            background-color: #b52b27;
+        }
+        .flash-messages {
+            color: #406a9f;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        nav {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        nav a {
+            color: #406a9f;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 15px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('agregar') }}" class="button">Nueva Tarea</a>
+        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    </nav>
+
+    <h1>Listado de Tareas</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% if tareas %}
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Fecha de vencimiento</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tarea in tareas %}
+            <tr>
+                <td>{{ tarea.titulo }}</td>
+                <td>{{ tarea.descripcion }}</td>
+                <td>{{ tarea.fecha_vencimiento }}</td>
+                <td>{{ tarea.estado }}</td>
+                <td>
+                    <a href="{{ url_for('editar', id=tarea.id) }}">Editar</a> |
+                    <form action="{{ url_for('eliminar', id=tarea.id) }}" method="POST" class="inline" onsubmit="return confirm('¿Seguro que quieres eliminar esta tarea?');">
+                        <button type="submit" class="delete-btn">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No hay tareas registradas.</p>
+    {% endif %}
+</body>
+</html>

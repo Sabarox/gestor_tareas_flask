@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Editar Tarea</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9f7;
+            margin: 40px auto;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #3c9d4a88;
+            background: #e9f3e9;
+        }
+        h1 {
+            color: #3c9d4a;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #3c9d4a;
+        }
+        input[type="text"],
+        textarea,
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #3c9d4a;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        button {
+            margin-top: 25px;
+            background-color: #3c9d4a;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #347a39;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #3c9d4a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .flash-messages {
+            color: #3c9d4a;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Tarea</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('editar', id=tarea.id) }}" method="POST">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" value="{{ tarea.titulo }}" required />
+
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" maxlength="300">{{ tarea.descripcion }}</textarea>
+
+        <label for="fecha_vencimiento">Fecha de vencimiento</label>
+        <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" value="{{ tarea.fecha_vencimiento }}" required />
+
+        <label for="estado">Estado</label>
+        <select id="estado" name="estado" required>
+            <option value="Pendiente" {% if tarea.estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+            <option value="Completada" {% if tarea.estado == 'Completada' %}selected{% endif %}>Completada</option>
+        </select>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+    <a href="{{ url_for('index') }}">Volver al listado</a>
+</body>
+</html>

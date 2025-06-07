@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tareas</title>
+</head>
+<body>
+    <h2>Lista de Tareas</h2>
+    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+        </tr>
+        {% for tarea in tareas %}
+        <tr>
+            <td>{{ tarea[0] }}</td>
+            <td>{{ tarea[1] }}</td>
+            <td>{{ tarea[2] }}</td>
+            <td>{{ tarea[3] }}</td>
+            <td>{{ tarea[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
